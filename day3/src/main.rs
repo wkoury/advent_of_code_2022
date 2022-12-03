@@ -20,19 +20,31 @@ fn main() {
 
     let mut sum: u32 = 0;
 
-    for line in contents.lines() {
-        // Split the line into two halves
-        let (left, right) = line.split_at(line.len() / 2);
+    let lines_length = contents.split('\n').count();
+    let lines = contents.lines();
+    let mut ii: usize = 0;
 
-        let mut similar_char: char = '0';
-        for left_char in left.chars() {
-            for right_char in right.chars() {
-                if left_char == right_char {
-                    similar_char = left_char;
+    let mut similar_char: char = '0';
+
+    while ii < lines_length - 1 {
+        // Get the line and the following 2 lines
+        let first_line = lines.clone().nth(ii).unwrap();
+        let second_line = lines.clone().nth(ii + 1).unwrap();
+        let third_line = lines.clone().nth(ii + 2).unwrap();
+
+        for char1 in first_line.chars() {
+            for char2 in second_line.chars() {
+                for char3 in third_line.chars() {
+                    if char1 == char2 && char2 == char3 {
+                        similar_char = char1;
+                    }
                 }
             }
         }
+
         sum += get_priority_from_char(similar_char);
+
+        ii += 3;
     }
 
     println!("The sum of the priorities is: {}", sum);
