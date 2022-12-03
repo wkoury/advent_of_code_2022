@@ -33,12 +33,18 @@ fn main() {
     }
 
     // Get the max value
-    println!("The elf carrying the most calories is carrying {} calories.", max_heap.peek().unwrap());
+    println!(
+        "The elf carrying the most calories is carrying {} calories.",
+        max_heap.peek().unwrap()
+    );
 
     let mut top_three_elves_total: u32 = 0;
     for _ in 1..4 {
         top_three_elves_total += max_heap.pop().unwrap();
     }
 
-    println!("The top three elves are carrying, in total, {} calories.", top_three_elves_total);
+    println!(
+        "The top three elves are carrying, in total, {} calories.",
+        top_three_elves_total
+    );
 }
