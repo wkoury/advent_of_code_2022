@@ -5,8 +5,6 @@ use std::io::prelude::*;
 use std::path::Path;
 
 fn main() {
-    println!("Hello, world!");
-
     // Open the input file
     let path: &Path = Path::new("./input.txt");
     let display = path.display();
@@ -25,7 +23,7 @@ fn main() {
     for line in contents.lines() {
         let pair = AssignmentPair::new(line.to_string());
 
-        if pair.range_contains_range() {
+        if pair.ranges_overlap() {
             number_of_pairs += 1;
         }
     }
@@ -68,6 +66,11 @@ impl AssignmentPair {
     fn range_contains_range(self) -> bool {
         (self.left.start >= self.right.start && self.left.end <= self.right.end)
             || (self.right.start >= self.left.start && self.right.end <= self.left.end)
+    }
+
+    fn ranges_overlap(self) -> bool {
+        (self.left.start >= self.right.start && self.left.start <= self.right.end)
+            || (self.right.start >= self.left.start && self.right.start <= self.left.end)
     }
 }
 
