@@ -52,11 +52,14 @@ fn main() {
         let from_stack_index: usize = raw_from_stack_index - 1;
         let to_stack_index: usize = raw_to_stack_index - 1;
 
+        let mut tmp_stack: Vec<char> = Vec::new();
         for _ in 0..amount_to_move {
             let tmp = stacks[from_stack_index].pop();
-            if let Some(..) = tmp {
-                stacks[to_stack_index].push(tmp.unwrap());
-            }
+            tmp_stack.push(tmp.unwrap());
+        }
+
+        while !tmp_stack.is_empty() {
+            stacks[to_stack_index].push(tmp_stack.pop().unwrap());
         }
 
         ii += 1;
