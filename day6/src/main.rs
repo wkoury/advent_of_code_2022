@@ -25,7 +25,7 @@ fn main() {
     let mut ii: usize = 0;
 
     while ii < line.len() && !done {
-        let substr = &line[ii..ii + 4];
+        let substr = &line[ii..ii + 14];
         dbg!(substr);
 
         if all_characters_are_different(substr) {
@@ -37,7 +37,7 @@ fn main() {
 
     println!(
         "{} characters need to be processed before the first start-of-packet marker is detected.",
-        ii + 3
+        ii + 13
     );
 }
 
@@ -48,5 +48,5 @@ fn all_characters_are_different(str: &str) -> bool {
         set.insert(char);
     }
 
-    set.len() == 4
+    set.len() == 14
 }
