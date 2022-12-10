@@ -3,6 +3,9 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 
+const TOTAL_DISK_SPACE_AVAILABLE: u32 = 70000000;
+const MINIMUM_USED_SPACE: u32 = 30000000;
+
 fn main() {
     // Open the input file
     let path: &Path = Path::new("./input.txt");
@@ -70,8 +73,8 @@ fn main() {
 
     let mut part_1_sum: u32 = 0;
 
-    for dir in computed_dirs {
-        if dir.1 < 100000 {
+    for dir in &computed_dirs {
+        if dir.1 < &100000 {
             part_1_sum += dir.1;
         }
     }
@@ -79,6 +82,27 @@ fn main() {
     println!(
         "The sum of the directories with less than 100000 bytes is {}",
         part_1_sum
+    );
+
+    // Part 2
+
+    let free_space = TOTAL_DISK_SPACE_AVAILABLE - computed_dirs.get("~").unwrap();
+    dbg!(&free_space);
+
+    let space_needed = MINIMUM_USED_SPACE - free_space;
+    dbg!(space_needed);
+
+    let mut possible_dirs: Vec<&u32> = computed_dirs
+        .iter()
+        .filter(|(_k, v)| **v > space_needed)
+        .map(|(_k, v)| v)
+        .collect();
+
+    possible_dirs.sort();
+
+    println!(
+        "The smallest directory that can be deleted for the update is {} bytes",
+        possible_dirs[0].to_owned()
     );
 }
 
