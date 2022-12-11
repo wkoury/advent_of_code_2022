@@ -31,11 +31,6 @@ fn main() {
         let x = (ii % length) as i32;
         let y = (ii / length) as i32;
 
-        dbg!(ii);
-        dbg!(x);
-        dbg!(y);
-        dbg!(tree_height);
-
         let mut visible_from_right = true;
         let mut visible_from_left = true;
         let mut visible_from_bottom = true;
@@ -49,9 +44,7 @@ fn main() {
                 .unwrap()
                 .to_digit(10)
                 .unwrap();
-            dbg!(other_tree_height);
             if tree_height <= other_tree_height {
-                println!("Not visible from right");
                 visible_from_right = false;
                 break;
             }
@@ -66,9 +59,7 @@ fn main() {
                 .unwrap()
                 .to_digit(10)
                 .unwrap();
-            dbg!(other_tree_height);
             if tree_height <= other_tree_height {
-                println!("Not visible from left");
                 visible_from_left = false;
                 break;
             }
@@ -84,9 +75,7 @@ fn main() {
                 .unwrap()
                 .to_digit(10)
                 .unwrap();
-            dbg!(other_tree_height);
             if tree_height <= other_tree_height {
-                println!("Not visible from bottom");
                 visible_from_bottom = false;
                 break;
             }
@@ -102,9 +91,7 @@ fn main() {
                 .unwrap()
                 .to_digit(10)
                 .unwrap();
-            dbg!(other_tree_height);
             if tree_height <= other_tree_height {
-                println!("Not visible from top");
                 visible_from_top = false;
                 break;
             }
@@ -122,16 +109,7 @@ fn main() {
             || visible_from_right
             || visible_from_top
         {
-            println!(
-                "Tree at ({}, {}) with height {} is visible",
-                x, y, tree_height
-            );
             visible_trees_count += 1;
-        } else {
-            println!(
-                "Tree at ({}, {}) with height {} is NOT visible",
-                x, y, tree_height
-            );
         }
 
         ii += 1;
