@@ -1,3 +1,4 @@
+use std::collections::BinaryHeap;
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
@@ -24,6 +25,7 @@ fn main() {
     let mut ii: usize = 0;
 
     let mut visible_trees_count: u32 = 0;
+    let mut scenic_scores: BinaryHeap<u32> = BinaryHeap::new();
 
     while ii < length * length {
         let tree_height_char = contents.chars().nth(ii).unwrap();
@@ -37,6 +39,7 @@ fn main() {
         let mut visible_from_top = true;
 
         let mut jj: i32 = ii as i32 + 1;
+        let mut right_viewing_distance: u32 = 0;
         while jj < length as i32 * (y + 1) {
             let other_tree_height = contents
                 .chars()
@@ -46,12 +49,15 @@ fn main() {
                 .unwrap();
             if tree_height <= other_tree_height {
                 visible_from_right = false;
+                right_viewing_distance += 1;
                 break;
             }
 
             jj += 1;
+            right_viewing_distance += 1;
         }
         jj = ii as i32 - 1;
+        let mut left_viewing_distance: u32 = 0;
         while jj >= length as i32 * y {
             let other_tree_height = contents
                 .chars()
@@ -61,13 +67,16 @@ fn main() {
                 .unwrap();
             if tree_height <= other_tree_height {
                 visible_from_left = false;
+                left_viewing_distance += 1;
                 break;
             }
 
             jj -= 1;
+            left_viewing_distance += 1;
         }
 
         jj = ii as i32 + length as i32;
+        let mut bottom_viewing_distance: u32 = 0;
         while jj < length as i32 * length as i32 {
             let other_tree_height = contents
                 .chars()
@@ -77,13 +86,16 @@ fn main() {
                 .unwrap();
             if tree_height <= other_tree_height {
                 visible_from_bottom = false;
+                bottom_viewing_distance += 1;
                 break;
             }
 
             jj += length as i32;
+            bottom_viewing_distance += 1;
         }
 
         jj = ii as i32 - length as i32;
+        let mut top_viewing_distance: u32 = 0;
         while jj >= 0 {
             let other_tree_height = contents
                 .chars()
@@ -93,10 +105,12 @@ fn main() {
                 .unwrap();
             if tree_height <= other_tree_height {
                 visible_from_top = false;
+                top_viewing_distance += 1;
                 break;
             }
 
             jj -= length as i32;
+            top_viewing_distance += 1;
         }
 
         // Check if a tree is at the edge of the grid
@@ -113,7 +127,17 @@ fn main() {
         }
 
         ii += 1;
+
+        let scenic_score = right_viewing_distance
+            * left_viewing_distance
+            * bottom_viewing_distance
+            * top_viewing_distance;
+
+        scenic_scores.push(scenic_score);
     }
 
+    let top_scenic_score = scenic_scores.pop().unwrap();
+
     println!("Visible trees: {}", visible_trees_count);
+    println!("The top possible scenic score is: {}", top_scenic_score);
 }
