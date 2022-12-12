@@ -20,68 +20,88 @@ impl Rope {
         ret
     }
 
-    pub fn move_tail(&mut self, direction: Direction, magnitude: u32) {
+    pub fn move_rope(&mut self, direction: Direction, magnitude: u32) {
         // First, compute the new head position
-        let new_head: Position = match direction {
-            Direction::Up => Position {
-                x: self.head.x,
-                y: self.head.y + magnitude as i32,
-            },
-            Direction::Down => Position {
-                x: self.head.x,
-                y: self.head.y - magnitude as i32,
-            },
-            Direction::Left => Position {
-                x: self.head.x - magnitude as i32,
-                y: self.head.y,
-            },
-            Direction::Right => Position {
-                x: self.head.x + magnitude as i32,
-                y: self.head.y,
-            },
-        };
+        let mut ii: u32 = 0;
 
-        println!("New head position: ");
-        dbg!(&new_head);
-        self.head = new_head;
+        while ii < magnitude {
+            let new_head: Position = match direction {
+                Direction::Up => Position {
+                    x: self.head.x,
+                    y: self.head.y + 1,
+                },
+                Direction::Down => Position {
+                    x: self.head.x,
+                    y: self.head.y - 1,
+                },
+                Direction::Left => Position {
+                    x: self.head.x - 1,
+                    y: self.head.y,
+                },
+                Direction::Right => Position {
+                    x: self.head.x + 1,
+                    y: self.head.y,
+                },
+            };
 
-        // We only need to move the tail if it is not adjacent anymore
-        if !self.is_adjacent() {
-            // We can compute the new tail position by drawing a straight line between the head and the tail, and then moving the tail along that line to the grid point next to the new head position.
-            // y = mx + b
-            // b = y - mx
-            let slope = (self.head.y as f32 - self.tail.y as f32)
-                / (self.head.x as f32 - self.tail.x as f32);
-            let y_intercept = self.head.y as f32 - slope * self.head.x as f32;
+            // println!("New head position: ");
+            // dbg!(&new_head);
+            self.head = new_head;
 
-            dbg!(&slope);
-            dbg!(&y_intercept);
-
-            // We need to move the tail along the line until it is adjacent to the new head position
-            let mut new_tail: Position = self.tail.clone();
-            while !self.is_adjacent() {
-                // Move the tail along the line until it is adjacent to the new head position
-                if self.head.x > self.tail.x {
-                    // Move the tail to the right
-                    new_tail.x += 1;
-                } else {
-                    // Move the tail to the left
-                    new_tail.x -= 1;
-                }
-
-                // Compute the new y position
-                new_tail.y = (slope * new_tail.x as f32 + y_intercept).round() as i32;
-
-                self.tail = new_tail.clone();
+            // We only need to move the tail if it is not adjacent anymore
+            if !self.is_adjacent() {
+                // We can compute the new tail position by drawing a straight line between the head and the tail, and then moving the tail along that line to the grid point next to the new head position.
+                // y = mx + b
+                // b = y - mx
+                let slope = (self.head.y as f32 - self.tail.y as f32)
+                    / (self.head.x as f32 - self.tail.x as f32);
+                let y_intercept = self.head.y as f32 - slope * self.head.x as f32;
 
                 dbg!(&slope);
                 dbg!(&y_intercept);
+
+                // We need to move the tail along the line until it is adjacent to the new head position
+                let mut new_tail: Position = self.tail.clone();
+                while !self.is_adjacent() {
+                    if slope.is_infinite() {
+                        println!("Slope is infinite");
+                        if self.head.y > self.tail.y {
+                            new_tail.y += 1;
+                        } else {
+                            new_tail.y -= 1;
+                        }
+                    } else {
+                        println!("Slope is finite");
+                        // Move the tail along the line until it is adjacent to the new head position
+                        if self.head.x > self.tail.x {
+                            // Move the tail to the right
+                            new_tail.x += 1;
+                        } else {
+                            // Move the tail to the left
+                            new_tail.x -= 1;
+                        }
+
+                        // Compute the new y position
+                        new_tail.y = (slope * new_tail.x as f32 + y_intercept).round() as i32;
+                    }
+
+                    self.tail = new_tail.clone();
+                    self.visited_positions.insert(self.tail.clone());
+
+                    dbg!(&slope);
+                    dbg!(&y_intercept);
+                    dbg!(&self.head);
+                    dbg!(&self.tail);
+                    dbg!(self.is_adjacent());
+                }
+
                 dbg!(&self.head);
                 dbg!(&self.tail);
-                dbg!(self.is_adjacent());
+
+                self.visited_positions.insert(self.tail.clone());
             }
 
-            self.visited_positions.insert(self.tail.clone());
+            ii += 1;
         }
     }
 
