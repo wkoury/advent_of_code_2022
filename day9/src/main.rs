@@ -32,7 +32,6 @@ fn part_one(filename: &str) -> u32 {
 
     while ii < lines.len() {
         let line = lines.get(ii).unwrap();
-        println!("Now processing line {}", ii);
         let words: Vec<&str> = line.split_whitespace().collect();
         let direction_char: char = words[0].chars().next().unwrap();
         let direction: Direction = match direction_char {

@@ -61,14 +61,12 @@ impl Rope {
                 let mut new_tail: Position = self.tail.clone();
                 while !self.is_adjacent() {
                     if slope.is_infinite() {
-                        println!("Slope is infinite");
                         if self.head.y > self.tail.y {
                             new_tail.y += 1;
                         } else {
                             new_tail.y -= 1;
                         }
                     } else {
-                        println!("Slope is finite");
                         // Move the tail along the line until it is adjacent to the new head position
                         if self.head.x > self.tail.x {
                             // Move the tail to the right
