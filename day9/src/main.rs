@@ -30,13 +30,10 @@ fn part_one(filename: &str) -> u32 {
     let lines: Vec<&str> = contents.lines().collect();
     let mut ii: usize = 0;
 
-    dbg!(&rope);
-
     while ii < lines.len() {
         let line = lines.get(ii).unwrap();
         println!("Now processing line {}", ii);
         let words: Vec<&str> = line.split_whitespace().collect();
-        dbg!(&words);
         let direction_char: char = words[0].chars().next().unwrap();
         let direction: Direction = match direction_char {
             'R' => Direction::Right,

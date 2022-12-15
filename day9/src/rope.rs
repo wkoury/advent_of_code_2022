@@ -45,7 +45,7 @@ impl Rope {
             };
 
             // println!("New head position: ");
-            // dbg!(&new_head);
+            // (&new_head);
             self.head = new_head;
 
             // We only need to move the tail if it is not adjacent anymore
@@ -56,9 +56,6 @@ impl Rope {
                 let slope = (self.head.y as f32 - self.tail.y as f32)
                     / (self.head.x as f32 - self.tail.x as f32);
                 let y_intercept = self.head.y as f32 - slope * self.head.x as f32;
-
-                dbg!(&slope);
-                dbg!(&y_intercept);
 
                 // We need to move the tail along the line until it is adjacent to the new head position
                 let mut new_tail: Position = self.tail.clone();
@@ -87,16 +84,7 @@ impl Rope {
 
                     self.tail = new_tail.clone();
                     self.visited_positions.insert(self.tail.clone());
-
-                    dbg!(&slope);
-                    dbg!(&y_intercept);
-                    dbg!(&self.head);
-                    dbg!(&self.tail);
-                    dbg!(self.is_adjacent());
                 }
-
-                dbg!(&self.head);
-                dbg!(&self.tail);
 
                 self.visited_positions.insert(self.tail.clone());
             }
