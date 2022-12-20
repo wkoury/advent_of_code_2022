@@ -81,8 +81,6 @@ impl Cpu {
     }
 
     fn get_signal_strength(&self) -> u32 {
-        dbg!(self.x, self.cycle);
-        dbg!(self.x as u32 * self.cycle);
         self.x as u32 * self.cycle
     }
 
