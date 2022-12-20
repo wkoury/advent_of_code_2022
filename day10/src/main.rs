@@ -4,6 +4,7 @@ use std::path::Path;
 
 fn main() {
     part_one();
+    part_two();
 }
 
 fn part_one() {
@@ -16,6 +17,18 @@ fn part_one() {
     }
 
     println!("Part one: {}", cpu.part_one_sum);
+}
+
+fn part_two() {
+    let contents: String = open_file("./input.txt");
+
+    let mut cpu: Cpu = Cpu::new();
+
+    for line in contents.lines() {
+        cpu.parse_operation(line);
+    }
+
+    cpu.part_two_print_grid();
 }
 
 fn open_file(filename: &str) -> String {
@@ -39,6 +52,7 @@ struct Cpu {
     x: i32,
     cycle: u32,
     part_one_sum: u32,
+    pixels: Vec<bool>,
 }
 
 impl Cpu {
@@ -47,6 +61,7 @@ impl Cpu {
             x: 1,
             cycle: 0,
             part_one_sum: 0,
+            pixels: Vec::<bool>::new(),
         }
     }
 
@@ -74,6 +89,13 @@ impl Cpu {
     }
 
     fn step_cycle(&mut self) {
+        // Before stepping the cycle, record whether the pixel is on or off
+        if (self.x - self.cycle as i32 % 40).abs() <= 1 {
+            self.pixels.push(true);
+        } else {
+            self.pixels.push(false);
+        }
+
         self.cycle += 1;
         if self.part_one_cpu_cycles() {
             self.part_one_sum += self.get_signal_strength();
@@ -91,6 +113,24 @@ impl Cpu {
             || self.cycle == 140
             || self.cycle == 180
             || self.cycle == 220
+    }
+
+    fn part_two_print_grid(&self) {
+        // Print the grid
+        println!("Part two:");
+        let width = 40;
+        let height = 6;
+        for y in 0..height {
+            for x in 0..width {
+                let index = y * width + x;
+                if self.pixels[index] {
+                    print!("#");
+                } else {
+                    print!(".");
+                }
+            }
+            println!();
+        }
     }
 }
 
